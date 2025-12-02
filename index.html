@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tỏ Tình Người Yêu</title>
+    <style>
+        body {font-family: Arial, sans-serif; background: linear-gradient(to right, #ffd6e0, #f6e7fb); min-height: 100vh; margin:0; padding:0;}
+        .container {max-width: 500px; margin: 80px auto; background: white; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.12); padding: 40px 30px; text-align: center;}
+        h1 {color: #ff4d79;}
+        .heart {color: #ff4d79; font-size: 90px; animation: beat 1s infinite; margin-bottom: 20px;}
+        @keyframes beat {0%, 100%{transform: scale(1);} 50%{transform: scale(1.1);}}
+        .button {padding: 10px 38px; border: none; border-radius: 24px; background: #ff4d79; color: white; font-size: 20px; margin-top: 35px; cursor: pointer; transition: background 0.2s;}
+        .button:hover {background: #e63a62;}
+        .message {visibility: hidden; margin-top:25px; color: #222; font-size:18px;}
+        .show {visibility: visible;}
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="heart">♥</div>
+    <h1>Gửi người anh yêu!</h1>
+    <p>Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp…</p>
+    <button class="button" onclick="showMsg()">Nhấn để xem điều anh muốn nói</button>
+    <div id="loveMsg" class="message">
+      <strong>Anh yêu em rất nhiều. Làm người yêu anh nhé! 💖</strong>
+    </div>
+  </div>
+  <script>
+    function showMsg() {
+      document.getElementById('loveMsg').classList.add('show');
+    }
+  </script>
+</body>
+</html>
