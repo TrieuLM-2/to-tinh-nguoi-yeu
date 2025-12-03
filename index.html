@@ -3,32 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tỏ Tình Người Yêu</title>
+    <title>Gửi Em Người Anh Yêu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {font-family: Arial, sans-serif; background: linear-gradient(to right, #ffd6e0, #f6e7fb); min-height: 100vh; margin:0; padding:0;}
-        .container {max-width: 500px; margin: 80px auto; background: white; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.12); padding: 40px 30px; text-align: center;}
-        h1 {color: #ff4d79;}
-        .heart {color: #ff4d79; font-size: 90px; animation: beat 1s infinite; margin-bottom: 20px;}
-        @keyframes beat {0%, 100%{transform: scale(1);} 50%{transform: scale(1.1);}}
-        .button {padding: 10px 38px; border: none; border-radius: 24px; background: #ff4d79; color: white; font-size: 20px; margin-top: 35px; cursor: pointer; transition: background 0.2s;}
-        .button:hover {background: #e63a62;}
-        .message {visibility: hidden; margin-top:25px; color: #222; font-size:18px;}
-        .show {visibility: visible;}
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-image: url('https://www.transparenttextures.com/patterns/hearts.png'); /* Pattern tim mờ */
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Để tim không bay ra ngoài tạo thanh cuộn */
+        }
+
+        .container {
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 77, 121, 0.2);
+            padding: 40px 30px;
+            text-align: center;
+            z-index: 10;
+            border: 2px solid #ffdde1;
+        }
+
+        h1 {
+            color: #ff4d79;
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .heart-icon {
+            color: #ff4d79;
+            font-size: 80px;
+            animation: beat 0.8s infinite alternate;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 77, 121, 0.5);
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative; /* Để nút Không chạy tương đối */
+            min-height: 60px;
+        }
+
+        .button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .btn-yes {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #ff5e78, #ff6a9f);
+        }
+
+        .btn-no {
+            background: #e0e0e0;
+            color: #555;
+            position: relative; /* Để dùng thuộc tính left/top khi chạy */
+        }
+
+        /* Phần tin nhắn ẩn */
+        .hidden-message {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 1s ease;
+        }
+
+        .final-text {
+            color: #ff4d79;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hiệu ứng tim bay (Pháo hoa) */
+        .floating-heart {
+            position: absolute;
+            color: #ff4d79;
+            font-size: 20px;
+            animation: floatUp 3s linear forwards;
+            pointer-events: none; /* Không che mất nút bấm */
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
     </style>
 </head>
 <body>
+
   <div class="container">
-    <div class="heart">♥</div>
+    <div class="heart-icon">❤️</div>
     <h1>Gửi người anh yêu!</h1>
-    <p>Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp…</p>
-    <button class="button" onclick="showMsg()">Nhấn để xem điều anh muốn nói</button>
-    <div id="loveMsg" class="message">
-      <strong>Anh yêu em rất nhiều. Làm người yêu anh nhé! 💖</strong>
+    <p>Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp...</p>
+    <p style="font-weight: bold; color: #ff4d79;">Làm người yêu anh nha?</p>
+
+    <div class="btn-group">
+        <button class="button btn-yes" onclick="acceptLove()">Có, em đồng ý! 💖</button>
+        <button class="button btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">Không bao giờ</button>
+    </div>
+
+    <div id="successMsg" class="hidden-message">
+        <div class="final-text">Cảm ơn em đã đến bên anh! <br> Yêu em rất nhiều! 💑</div>
+        <p>Chuẩn bị đi ăn thôiiiiii!</p>
     </div>
   </div>
+
   <script>
-    function showMsg() {
-      document.getElementById('loveMsg').classList.add('show');
+    // Logic cho nút "Không" chạy trốn
+    function moveButton() {
+        var btnNo = document.getElementById('btnNo');
+        var x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 100);
+        var y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 100);
+        
+        // Đặt vị trí là fixed để nó chạy khắp màn hình chứ không kẹt trong hộp
+        btnNo.style.position = 'fixed';
+        btnNo.style.left = x + 'px';
+        btnNo.style.top = y + 'px';
+    }
+
+    // Logic cho nút "Có"
+    function acceptLove() {
+        // 1. Ẩn 2 nút đi
+        document.querySelector('.btn-group').style.display = 'none';
+        
+        // 2. Hiện thông báo
+        document.getElementById('successMsg').style.display = 'block';
+
+        // 3. Bắn pháo hoa tim
+        createHearts();
+    }
+
+    // Hàm tạo mưa tim (Hiệu ứng pháo hoa)
+    function createHearts() {
+        const container = document.body;
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px'; // Tim to nhỏ khác nhau
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's'; // Tốc độ bay khác nhau
+                
+                // Vị trí bắt đầu từ dưới màn hình bay lên
+                heart.style.top = '100vh'; 
+                
+                container.appendChild(heart);
+
+                // Xóa tim sau khi bay xong cho nhẹ máy
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }, i * 100); // Mỗi tim bay cách nhau 1 chút
+        }
     }
   </script>
 </body>
