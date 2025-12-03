@@ -9,14 +9,20 @@
         body {
             font-family: 'Nunito', sans-serif;
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            background-image: url('https://www.transparenttextures.com/patterns/hearts.png'); /* Pattern tim mờ */
+            background-image: url('https://www.transparenttextures.com/patterns/hearts.png');
             min-height: 100vh;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Để tim không bay ra ngoài tạo thanh cuộn */
+            overflow: hidden;
+            transition: background 1s ease;
+        }
+
+        body.sad-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
         }
 
         .container {
@@ -30,6 +36,13 @@
             text-align: center;
             z-index: 10;
             border: 2px solid #ffdde1;
+            transition: all 1s ease;
+        }
+
+        body.sad-mode .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #95a5a6;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
@@ -37,6 +50,11 @@
             font-family: 'Dancing Script', cursive;
             font-size: 3em;
             margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+
+        body.sad-mode h1 {
+            color: #7f8c8d;
         }
 
         .sub-quote {
@@ -44,6 +62,11 @@
             font-size: 1.4em;
             color: #ff9aa2;
             margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+
+        body.sad-mode .sub-quote {
+            color: #95a5a6;
         }
 
         p {
@@ -58,6 +81,13 @@
             animation: beat 0.8s infinite alternate;
             margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(255, 77, 121, 0.5);
+            transition: all 0.5s ease;
+        }
+
+        body.sad-mode .heart-icon {
+            color: #7f8c8d;
+            animation: crying 2s infinite;
+            text-shadow: none;
         }
 
         @keyframes beat {
@@ -65,12 +95,44 @@
             100% { transform: scale(1.15); }
         }
 
+        @keyframes crying {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-5px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-3px); }
+        }
+
+        /* Nước mắt rơi */
+        .tear {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #3498db;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            opacity: 0.7;
+            animation: tearDrop 2s infinite;
+            display: none;
+        }
+
+        body.sad-mode .tear {
+            display: block;
+        }
+
+        @keyframes tearDrop {
+            0% { top: 140px; opacity: 1; }
+            100% { top: 200px; opacity: 0; }
+        }
+
+        .tear:nth-child(1) { left: 48%; animation-delay: 0s; }
+        .tear:nth-child(2) { left: 52%; animation-delay: 0.5s; }
+
         .btn-group {
             margin-top: 30px;
             display: flex;
             justify-content: center;
             gap: 20px;
-            position: relative; /* Để nút Không chạy tương đối */
+            position: relative;
             min-height: 60px;
         }
 
@@ -99,15 +161,23 @@
         .btn-no {
             background: #e0e0e0;
             color: #555;
-            position: relative; /* Để dùng thuộc tính left/top khi chạy */
+            position: relative;
             font-size: 16px;
-            padding: 10px 25px; /* Cho nhỏ hơn nút Có một chút */
+            padding: 10px 25px;
         }
 
         .btn-no-hint {
             font-size: 0.9em;
             color: #999;
             margin-top: 5px;
+        }
+
+        .reject-counter {
+            font-size: 0.85em;
+            color: #e74c3c;
+            margin-top: 8px;
+            font-weight: bold;
+            display: none;
         }
 
         /* Phần tin nhắn ẩn */
@@ -117,10 +187,23 @@
             animation: fadeIn 1s ease;
         }
 
+        .sad-message {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 1s ease;
+        }
+
         .final-text {
             color: #ff4d79;
             font-family: 'Dancing Script', cursive;
             font-size: 2.2em;
+            font-weight: bold;
+        }
+
+        .sad-text {
+            color: #7f8c8d;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
             font-weight: bold;
         }
 
@@ -146,32 +229,73 @@
             color: #ff4d79;
             font-size: 20px;
             animation: floatUp 3s linear forwards;
-            pointer-events: none; /* Không che mất nút bấm */
+            pointer-events: none;
+        }
+
+        .broken-heart {
+            position: absolute;
+            font-size: 30px;
+            animation: fallDown 3s linear forwards;
+            pointer-events: none;
         }
 
         @keyframes floatUp {
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
         }
+
+        @keyframes fallDown {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
+        }
+
+        /* Nút retry sau khi từ chối 10 lần */
+        .btn-retry {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            margin-top: 15px;
+        }
+
+        .btn-retry:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #2980b9, #3498db);
+        }
+
     </style>
 </head>
 <body>
 
+  <!-- Audio nhạc vui và buồn -->
+  <audio id="happyMusic" loop>
+    <!-- Thay link nhạc vui ở đây (có thể dùng link từ Free Music Archive, YouTube download, etc) -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+  
+  <audio id="sadMusic" loop>
+    <!-- Thay link nhạc buồn ở đây (piano buồn, acoustic buồn...) -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="container">
-    <div class="heart-icon">❤️</div>
-    <!-- Thay tên/nickname người yêu ở đây -->
+    <div class="heart-icon" id="heartIcon">❤️</div>
+    <div class="tear"></div>
+    <div class="tear"></div>
+
     <h1 id="mainTitle">Gửi bé của anh!</h1>
-    <div class="sub-quote">“Gặp được em là món quà đẹp nhất trong thanh xuân của anh.”</div>
+    <div class="sub-quote" id="subQuote">"Gặp được em là món quà đẹp nhất trong thanh xuân của anh."</div>
 
-    <p>Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp...</p>
-    <p style="font-weight: bold; color: #ff4d79;">Làm người yêu anh nha?</p>
+    <p id="mainText">Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp...</p>
+    <p id="question" style="font-weight: bold; color: #ff4d79;">Làm người yêu anh nha?</p>
 
-    <div class="btn-group">
+    <div class="btn-group" id="btnGroup">
         <button class="button btn-yes" onclick="acceptLove()">Có, em đồng ý! 💖</button>
-        <button class="button btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">Không bao giờ</button>
+        <button class="button btn-no" id="btnNo" onmouseover="moveButton()" onclick="rejectLove()">Không bao giờ</button>
     </div>
-    <div class="btn-no-hint">Thử bấm “Không bao giờ” xem nào... 😏</div>
+    <div class="btn-no-hint">Thử bấm "Không bao giờ" xem nào... 😏</div>
+    <div class="reject-counter" id="rejectCounter"></div>
 
+    <!-- Thông báo khi đồng ý -->
     <div id="successMsg" class="hidden-message">
         <div class="final-text">
             Cảm ơn em đã đến bên anh! <br>
@@ -184,13 +308,45 @@
             <li>Anh hứa sẽ cố gắng mỗi ngày để xứng đáng với tình yêu của em.</li>
         </ul>
     </div>
+
+    <!-- Thông báo khi từ chối 10 lần -->
+    <div id="sadMsg" class="sad-message">
+        <div class="sad-text">
+            Anh buồn quá... 💔<br>
+            Em thật sự không cho anh cơ hội sao? 😢
+        </div>
+        <p style="color: #7f8c8d;">Anh sẽ chờ em... dù có lâu đến đâu. Anh vẫn luôn ở đây.</p>
+        <p style="font-size: 0.95em; color: #95a5a6;">Nếu em đổi ý, anh vẫn sẵn sàng nhận em về bên anh ❤️</p>
+        <button class="button btn-retry" onclick="resetPage()">Em nghĩ lại rồi... 🥺</button>
+    </div>
   </div>
 
   <script>
-    // Logic cho nút "Không" chạy trốn
+    var rejectCount = 0;
+    var happyMusic = document.getElementById('happyMusic');
+    var sadMusic = document.getElementById('sadMusic');
+
+    // Logic cho nút "Không" chạy trốn + đếm số lần từ chối
+    function rejectLove() {
+        rejectCount++;
+        
+        if (rejectCount < 10) {
+            // Vẫn còn cơ hội, nút tiếp tục chạy
+            moveButton();
+            
+            // Hiện counter cảnh báo
+            var counter = document.getElementById('rejectCounter');
+            counter.style.display = 'block';
+            counter.textContent = '😢 Em đã từ chối ' + rejectCount + ' lần rồi... (' + (10 - rejectCount) + ' lần nữa anh sẽ rất buồn)';
+        } else {
+            // Từ chối đủ 10 lần → kích hoạt chế độ buồn
+            triggerSadMode();
+        }
+    }
+
     function moveButton() {
         var btnNo = document.getElementById('btnNo');
-        var padding = 80; // khoảng an toàn để nút không sát mép màn hình
+        var padding = 80;
         var maxX = window.innerWidth - btnNo.offsetWidth - padding;
         var maxY = window.innerHeight - btnNo.offsetHeight - padding;
 
@@ -200,31 +356,102 @@
         x = Math.max(padding / 2, x);
         y = Math.max(padding / 2, y);
 
-        // Đặt vị trí là fixed để nó chạy khắp màn hình chứ không kẹt trong hộp
         btnNo.style.position = 'fixed';
         btnNo.style.left = x + 'px';
         btnNo.style.top = y + 'px';
     }
 
-    // Logic cho nút "Có"
+    // Chế độ buồn
+    function triggerSadMode() {
+        // 1. Đổi giao diện sang tông xám buồn
+        document.body.classList.add('sad-mode');
+        
+        // 2. Đổi icon tim thành tim khóc
+        document.getElementById('heartIcon').textContent = '💔';
+        
+        // 3. Đổi text
+        document.getElementById('mainTitle').textContent = 'Anh đã cố gắng rồi...';
+        document.getElementById('subQuote').textContent = '"Có lẽ anh không đủ may mắn..."';
+        document.getElementById('mainText').style.display = 'none';
+        document.getElementById('question').style.display = 'none';
+        
+        // 4. Ẩn nút và hint
+        document.getElementById('btnGroup').style.display = 'none';
+        document.querySelector('.btn-no-hint').style.display = 'none';
+        document.getElementById('rejectCounter').style.display = 'none';
+        
+        // 5. Hiện thông báo buồn
+        document.getElementById('sadMsg').style.display = 'block';
+        
+        // 6. Phát nhạc buồn
+        happyMusic.pause();
+        happyMusic.currentTime = 0;
+        sadMusic.play();
+        
+        // 7. Hiệu ứng tim rơi (tim tan vỡ)
+        createBrokenHearts();
+    }
+
+    // Logic cho nút "Có" (happy ending)
     function acceptLove() {
-        // 0. Đổi tiêu đề cho hợp vibe "đã đồng ý"
+        // Dừng nhạc buồn nếu đang phát
+        sadMusic.pause();
+        sadMusic.currentTime = 0;
+        
+        // 0. Đổi tiêu đề
         var title = document.getElementById('mainTitle');
         title.textContent = 'Từ giờ em là người anh yêu nhất!';
 
-        // 1. Ẩn 2 nút đi và gợi ý dưới nút
-        document.querySelector('.btn-group').style.display = 'none';
+        // 1. Ẩn nút và hint
+        document.getElementById('btnGroup').style.display = 'none';
         var hint = document.querySelector('.btn-no-hint');
         if (hint) hint.style.display = 'none';
+        document.getElementById('rejectCounter').style.display = 'none';
 
         // 2. Hiện thông báo
         document.getElementById('successMsg').style.display = 'block';
 
-        // 3. Bắn pháo hoa tim
+        // 3. Phát nhạc vui
+        happyMusic.play();
+
+        // 4. Bắn pháo hoa tim
         createHearts();
     }
 
-    // Hàm tạo mưa tim (Hiệu ứng pháo hoa)
+    // Hàm reset lại trang (khi bấm "Em nghĩ lại rồi")
+    function resetPage() {
+        // Reset counter
+        rejectCount = 0;
+        
+        // Tắt chế độ buồn
+        document.body.classList.remove('sad-mode');
+        
+        // Dừng nhạc buồn
+        sadMusic.pause();
+        sadMusic.currentTime = 0;
+        
+        // Reset lại giao diện
+        document.getElementById('heartIcon').textContent = '❤️';
+        document.getElementById('mainTitle').textContent = 'Gửi bé của anh!';
+        document.getElementById('subQuote').textContent = '"Gặp được em là món quà đẹp nhất trong thanh xuân của anh."';
+        document.getElementById('mainText').style.display = 'block';
+        document.getElementById('question').style.display = 'block';
+        
+        // Hiện lại nút
+        document.getElementById('btnGroup').style.display = 'flex';
+        document.querySelector('.btn-no-hint').style.display = 'block';
+        
+        // Ẩn thông báo buồn
+        document.getElementById('sadMsg').style.display = 'none';
+        
+        // Reset vị trí nút "Không"
+        var btnNo = document.getElementById('btnNo');
+        btnNo.style.position = 'relative';
+        btnNo.style.left = 'auto';
+        btnNo.style.top = 'auto';
+    }
+
+    // Hàm tạo mưa tim vui (Hiệu ứng pháo hoa)
     function createHearts() {
         const container = document.body;
         for (let i = 0; i < 50; i++) {
@@ -233,21 +460,43 @@
                 heart.classList.add('floating-heart');
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px'; // Tim to nhỏ khác nhau
-                heart.style.animationDuration = (Math.random() * 2 + 2) + 's'; // Tốc độ bay khác nhau
-                
-                // Vị trí bắt đầu từ dưới màn hình bay lên
-                heart.style.top = '100vh'; 
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                heart.style.top = '100vh';
                 
                 container.appendChild(heart);
 
-                // Xóa tim sau khi bay xong cho nhẹ máy
                 setTimeout(() => {
                     heart.remove();
                 }, 4000);
-            }, i * 100); // Mỗi tim bay cách nhau 1 chút
+            }, i * 100);
+        }
+    }
+
+    // Hàm tạo tim rơi buồn (tim vỡ)
+    function createBrokenHearts() {
+        const container = document.body;
+        const sadEmojis = ['💔', '😢', '😭', '🥀'];
+        
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('broken-heart');
+                heart.innerHTML = sadEmojis[Math.floor(Math.random() * sadEmojis.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 25) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                heart.style.top = '-50px';
+                heart.style.color = '#7f8c8d';
+                
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, i * 150);
         }
     }
   </script>
 </body>
-</html>
+    </html>
