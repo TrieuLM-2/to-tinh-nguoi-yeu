@@ -39,6 +39,13 @@
             margin-bottom: 10px;
         }
 
+        .sub-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4em;
+            color: #ff9aa2;
+            margin-bottom: 15px;
+        }
+
         p {
             font-size: 1.1em;
             color: #555;
@@ -93,6 +100,14 @@
             background: #e0e0e0;
             color: #555;
             position: relative; /* Để dùng thuộc tính left/top khi chạy */
+            font-size: 16px;
+            padding: 10px 25px; /* Cho nhỏ hơn nút Có một chút */
+        }
+
+        .btn-no-hint {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 5px;
         }
 
         /* Phần tin nhắn ẩn */
@@ -105,8 +120,19 @@
         .final-text {
             color: #ff4d79;
             font-family: 'Dancing Script', cursive;
-            font-size: 2em;
+            font-size: 2.2em;
             font-weight: bold;
+        }
+
+        .promise-list {
+            margin-top: 10px;
+            text-align: left;
+            font-size: 1em;
+            color: #666;
+        }
+
+        .promise-list li {
+            margin-bottom: 4px;
         }
 
         @keyframes fadeIn {
@@ -127,14 +153,16 @@
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
         }
-
     </style>
 </head>
 <body>
 
   <div class="container">
     <div class="heart-icon">❤️</div>
-    <h1>Gửi người anh yêu!</h1>
+    <!-- Thay tên/nickname người yêu ở đây -->
+    <h1 id="mainTitle">Gửi bé của anh!</h1>
+    <div class="sub-quote">“Gặp được em là món quà đẹp nhất trong thanh xuân của anh.”</div>
+
     <p>Em có biết không, mỗi ngày bên em đều là món quà tuyệt vời nhất. Anh muốn cùng em viết tiếp những hành trình thật đẹp...</p>
     <p style="font-weight: bold; color: #ff4d79;">Làm người yêu anh nha?</p>
 
@@ -142,10 +170,19 @@
         <button class="button btn-yes" onclick="acceptLove()">Có, em đồng ý! 💖</button>
         <button class="button btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">Không bao giờ</button>
     </div>
+    <div class="btn-no-hint">Thử bấm “Không bao giờ” xem nào... 😏</div>
 
     <div id="successMsg" class="hidden-message">
-        <div class="final-text">Cảm ơn em đã đến bên anh! <br> Yêu em rất nhiều! 💑</div>
-        <p>Chuẩn bị đi ăn thôiiiiii!</p>
+        <div class="final-text">
+            Cảm ơn em đã đến bên anh! <br>
+            Từ giờ em chính thức là người anh thương nhất! 💑
+        </div>
+        <p>Chuẩn bị đi ăn thôiiiiii! Em muốn ăn gì, anh chở đi. 🥰</p>
+        <ul class="promise-list">
+            <li>Anh hứa sẽ luôn lắng nghe em, dù là những chuyện nhỏ xíu xiu.</li>
+            <li>Anh hứa sẽ bên cạnh em những lúc em vui nhất và cả khi em mệt nhất.</li>
+            <li>Anh hứa sẽ cố gắng mỗi ngày để xứng đáng với tình yêu của em.</li>
+        </ul>
     </div>
   </div>
 
@@ -153,9 +190,16 @@
     // Logic cho nút "Không" chạy trốn
     function moveButton() {
         var btnNo = document.getElementById('btnNo');
-        var x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 100);
-        var y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 100);
-        
+        var padding = 80; // khoảng an toàn để nút không sát mép màn hình
+        var maxX = window.innerWidth - btnNo.offsetWidth - padding;
+        var maxY = window.innerHeight - btnNo.offsetHeight - padding;
+
+        var x = Math.random() * maxX;
+        var y = Math.random() * maxY;
+
+        x = Math.max(padding / 2, x);
+        y = Math.max(padding / 2, y);
+
         // Đặt vị trí là fixed để nó chạy khắp màn hình chứ không kẹt trong hộp
         btnNo.style.position = 'fixed';
         btnNo.style.left = x + 'px';
@@ -164,9 +208,15 @@
 
     // Logic cho nút "Có"
     function acceptLove() {
-        // 1. Ẩn 2 nút đi
+        // 0. Đổi tiêu đề cho hợp vibe "đã đồng ý"
+        var title = document.getElementById('mainTitle');
+        title.textContent = 'Từ giờ em là người anh yêu nhất!';
+
+        // 1. Ẩn 2 nút đi và gợi ý dưới nút
         document.querySelector('.btn-group').style.display = 'none';
-        
+        var hint = document.querySelector('.btn-no-hint');
+        if (hint) hint.style.display = 'none';
+
         // 2. Hiện thông báo
         document.getElementById('successMsg').style.display = 'block';
 
